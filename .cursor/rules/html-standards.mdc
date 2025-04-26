@@ -1,0 +1,55 @@
+---
+description: 
+globs: html,tsx,jsx
+alwaysApply: false
+---
+## HTML
+
+1. Utilize semantic tags as much as possible.
+
+- Using semantic HTML elements is crucial for accessibility purposes.
+
+```html
+Bad:
+<div className={cx(classes.root, 'mt-modal')}>
+  <div className='mt-modal-header'>
+    <span className={cx(classes.header, 'modal-title')}>{t('modal.title')}</span>
+  </div>
+</div>
+Good:
+<section className={cx(classes.root, 'mt-modal')}>
+  <header className='mt-modal-header'>
+    <h3 className={cx(classes.header, 'modal-title')}>{t('modal.title')}</h3>
+  </header>
+</section>
+```
+
+3. Ensure that inline elements do not contain block elements
+
+```html
+Anti-pattern
+<span>
+  <p>Some text</p>
+</span
+```
+
+4. Make sure that interactive elements (buttons, links, form elements etc.) have clear focus indication
+
+5. Keep the DOM tree as small as possible. Avoid using redundant wrappers
+
+- When adding extra wrappers to your code for styling and/or positioning purposes, consider using different Flexbox and Grid techniques to avoid extra DOM nodes
+
+```html
+Bad:
+<div className={classes.root}>
+  <div className={classes.wrapper}>
+    <div className={classes.innerWrapper}>
+      <!-- content -->
+    </div>
+  </div>
+</div>
+Good:
+<div className={classes.root}>
+  <!-- content -->
+</div>
+```

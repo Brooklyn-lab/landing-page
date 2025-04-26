@@ -1,0 +1,192 @@
+.about {
+  padding: 96px 0;
+  background-color: #ffffff;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.textContent {
+  max-width: 763px;
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #eba37a;
+  margin: 0;
+}
+
+.subtitle {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.375;
+  letter-spacing: 0.04em;
+  color: #222222;
+  margin: 0;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  p {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: #595959;
+    margin: 0;
+  }
+}
+
+.imageWrapper {
+  flex-shrink: 0;
+  width: 563px;
+  height: 700px;
+  position: relative;
+}
+
+.image {
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+@media (max-width: 1440px) {
+  .imageWrapper {
+    width: 460px;
+    height: 572px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .textContent {
+    gap: 80px;
+  }
+
+  .imageWrapper {
+    width: 400px;
+    height: 498px;
+  }
+
+  .subtitle {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .about {
+    padding: 80px 0;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .content {
+    gap: 24px;
+  }
+
+  .textContent {
+    gap: 60px;
+  }
+
+  .imageWrapper {
+    width: 320px;
+    height: 398px;
+  }
+
+  .subtitle {
+    font-size: 24px;
+  }
+
+  .description p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 60px 0;
+  }
+
+  .content {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .textContent {
+    gap: 40px;
+    max-width: 100%;
+  }
+
+  .imageWrapper {
+    width: 100%;
+    height: 400px;
+  }
+
+  .subtitle {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .title {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .about {
+    padding: 40px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .content {
+    gap: 32px;
+  }
+
+  .textContent {
+    gap: 32px;
+  }
+
+  .imageWrapper {
+    height: 320px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+  .description p {
+    font-size: 14px;
+  }
+}

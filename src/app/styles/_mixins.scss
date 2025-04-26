@@ -1,0 +1,79 @@
+@import "./variables";
+
+// Typography mixins
+@mixin title-large {
+  font-family: $font-family-base;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-lg;
+  line-height: 1.375;
+  letter-spacing: 0.04em;
+  color: $text-color;
+  margin: 0;
+}
+
+@mixin title-accent {
+  font-family: $font-family-base;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $primary-color;
+  margin: 0;
+}
+
+@mixin text-regular {
+  font-family: $font-family-base;
+  font-weight: $font-weight-regular;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: $text-secondary;
+  margin: 0;
+}
+
+// Layout mixins
+@mixin container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+  width: 100%;
+}
+
+@mixin section-padding {
+  padding: $spacing-4xl 0;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-3xl 0;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Media queries
+@mixin mobile {
+  @media (max-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (max-width: $breakpoint-xl) {
+    @content;
+  }
+}

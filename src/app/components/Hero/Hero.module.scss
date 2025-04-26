@@ -1,0 +1,36 @@
+@import "@/app/styles/variables";
+@import "@/app/styles/mixins";
+
+.hero {
+  background-image: linear-gradient(
+      rgba(34, 27, 23, 0.2),
+      rgba(34, 27, 23, 0.2)
+    ),
+    url("/images/hero-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  border-radius: 8px;
+  max-width: 1410px;
+  margin: 0 auto;
+  height: 745px;
+  margin-top: 76px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1410px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  padding-top: 3rem;
+}
+
+.title {
+  max-width: 960px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 3.75rem;
+  line-height: 80px;
+  color: #fffbfb;
+  text-align: left;
+}

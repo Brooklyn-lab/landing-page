@@ -1,0 +1,29 @@
+---
+description: 
+globs: css,scss
+alwaysApply: false
+---
+## CSS
+
+1. Do not animate left, right, width and other CSS properties
+
+- Such properties cause CLS(layout shifts) and as a result Pagespped becomes worse. Safe properties for animations are: translate, rotate, opacity and other which doesn’t cause layout re-render.
+
+
+2. Avoid Deep Nesting in CSS Selectors
+
+- Consider creating new classes to reduce nesting depth. It improves maintainability, reduces specificity conflicts, and potentially improves browser performance by simplifying the DOM lookup process.
+
+```scss
+// Bad
+.root {
+  div {
+    h2 {
+    }
+  }
+}
+// Good
+.root {}
+.container {}
+.title {}
+```

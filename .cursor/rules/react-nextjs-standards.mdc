@@ -1,0 +1,377 @@
+---
+description: 
+globs: jsx,tsx
+alwaysApply: false
+---
+# React/Next.js standarts
+
+1. Avoid large Components.
+
+- Components exceeding 70 lines should be divided into multiple smaller components to enhance readability and maintainability.
+- Component name must clearly describe what it is doing.
+- Only one React component in file.
+
+```typescript
+// Bad:
+const Component = () => {
+  // Having excessively long functions or components. More then 70 lines of code...
+};
+// Good:
+const Component = () => {
+  // Code related only to a particular component. Less then 70 lines of code...
+};
+```
+
+2. Do not perform any calculation in the render.
+
+- Do not use custom rendering functions like {renderInput()} in the example above.
+- Avoid performing calculations inside React components. Move sorting/calculation logic to reselect selectors or utility functions outside the component. We will cover everything with unit tests later.
+- Avoid nesting components.
+
+```typescript
+// Bad:
+const Component = () => {
+  return (
+    <Formik>
+      {renderInput()}
+      ... other code
+    </Formik>
+  )
+};
+// Good:
+const Input = () => {  
+  return ( // code  )
+};
+const Component = () => {  
+  return (
+    <Formik>
+      <Input />
+      ... other code
+    </Formik>
+  )
+};
+
+// --------------------------------------------------------
+
+// Bad:
+const Component = () => {
+  const allGames = useAppSelector(getGamesSelector)
+  const newGames = allGames.filter(i => i.tags.includes('new')).sort(...)  
+  return (
+    <GamesList games={newGames} />
+  )
+};
+// Good:
+const Component = () => {
+  const newGames = useAppSelector(getNewGamesSelector) // <-- selector returns already sorted games
+  return (
+    <GamesList games={newGames} />
+  )
+};
+
+// --------------------------------------------------------
+
+// Bad: 
+export default function ParentComponent(props) {
+  function InnerComponent() { // <-- nested component
+    // ...
+  }
+  return (
+      <InnerComponent />
+  );
+}
+// Good:
+function InnerComponent() { // <-- move out nested component
+  // ...
+}
+export default function ParentComponent(props) {
+  return (
+      <InnerComponent />
+  );
+}
+```
+
+3. Do not use interfaces for props validation.
+
+- Use types for props validation.
+
+```typescript
+// Bad:
+interface ComponentProps {
+  name: string
+}
+const Component = (props: ComponentProps) => {
+ // code
+}
+// Good:
+type Props = {
+  name: string
+}
+const Component = (props: Props) => {  
+  // code
+}
+```
+
+4. Keep all texts in Prismic.
+
+- All text strings should be stored in Prismic.
+- Use Rich text component for multi line strings.
+
+```typescript
+// Bad:
+const Component = (props: Props) => {
+  return <span>Promo page</span>
+}
+
+// Good:
+const Component = (props: Props) => {
+  const t = useTranslation()
+  return <span>{t('promo_page_title')}</span>
+}
+
+// --------------------------------------------------------
+
+// Bad:
+<span> 
+  {t('for')} {t('gold_coin_gc')} {t('jackpots')}
+<span>
+
+// Good:
+<RichText
+  field={t('jackpotbottombar.gc_desc_text')}
+  components={{
+    paragraph: ({ children }) => <p className={classes.extraInfo}>{children}</p>,
+    strong: ({ children }) => (
+      <span>
+        {children} {GCContribute}
+      </span>
+    ),
+  }}
+/>
+```
+
+5. Do not use old next router.
+
+```typescript
+// Bad:
+import { useRouter } from 'next/router'
+// Better:
+import { useRouter } from 'next/navigation'
+// Good: // custom navigation hook wrapper which supports multi-language mode
+import { useRouter } from 'app/context/navigation'
+```
+
+6. Try to move additional logic from component to custom hook.
+
+```typescript
+// Bad:
+function SomeComponent() {
+  const [username, setUsername] = useState(null)
+  const [isError, setIsError] = useState(false)
+
+  useEffect(() => {
+    const username = getUserAccount()
+    
+    if (username) {
+      setUsername(username)
+    } else {
+      setIsError(true)
+    }
+  }, [])
+
+  if(username) {
+    return <Username username={username} />
+  }
+
+  return null 
+}
+
+// ---------------------------------------------------------
+
+// Good:
+// file useUsername.ts
+function useUsername() {
+  const [name, setName] = useState(null);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const username = getName();
+    if (username) {
+      setName(username);
+    } else {
+      setIsError(true);
+    }
+  }, []);
+
+  return { name, isError };
+}
+
+// file SomeComponent.tsx
+function SomeComponent(){
+  const { name, isError } = useUsername();
+  
+  if (isError) {
+    return <ErrorPage />;
+  }
+
+  return name ? <Username username={username} /> : <Spinner />;
+}
+```
+
+7. Avoid using 2+ lines of code within inline functions
+
+```typescript
+// Bad:
+function SomeComponent() {
+  return <Button onClick={() => {
+    doSomething()
+    doSomethingElse()
+  }} />
+}
+// Good:
+function SomeComponent() {
+  const handleClick = () => {
+      doSomething()
+      doSomethingElse()
+  }
+  
+  return <Button onClick={handleClick} />
+}
+```
+
+8. Run unrelated async operations in parallel whenever it is possible
+**If you’re making async calls with await, do not let unrelated async operations block each other. Consider using next options:**
+
+- Promise.all() or Promise.allSettled() API
+- (recommended) make every component independent from each other and render them with <Suspense> wrapper
+
+```typescript
+// Bad:
+export default async function SomePage() {
+  // 🚫 avoid doing this, it’s slow
+  const thing1 = await asyncThing1()
+  console.log(thing1)
+  const thing2 = await asyncThing2()
+  console.log(thing2)
+  return (
+    <PageContainer thing={thing1}>
+      <NestedPageContainer thing={thing2} />
+    </PageContainer>
+  )
+}
+// Better:
+export default async function SomePage() {  
+  const [thing1, thing2] = await Promise.allSettled([asyncThing1(), asyncThing2()]);
+  return (
+    <PageContainer thing={thing1}>
+      <NestedPageContainer thing={thing2} />
+    </PageContainer>
+  )
+}
+// Good:
+// ✅ this is recommended approach - every component is wrapped with <Suspense> and all async operations are performed within components themselves
+// PageContainer.tsx
+export default async function PageContainer() {
+  const thing1 = await asyncThing1()
+  <PageContainerContent thing1={thing1} />
+}
+// NestedPageContainer.tsx
+export default async function NestedPageContainer() {
+  const thing2 = await asyncThing2()
+  <NestedPageContainerContent thing1={thing2} />
+}
+// SomePage.tsx
+export default async function SomePage() {  
+  return (
+    <>
+      <Suspense fallback={<PageContainerSkeleton />}>
+        <PageContainer />
+      </Suspense>
+      <Suspense fallback={<NestedPageSkeleton />}>
+        <NestedPageContainer />
+      </Suspense>
+    </>
+  )
+}
+```
+
+9. Always test negative scenarios. Do not test “Happy path” only
+
+- This is especially true for async code where an error may emerge because of Network issues or unavailability of 3d party service or API.
+
+```typescript
+// Bad:
+const data = await getData()
+const parsedData = parseData(data)
+// Good:
+try {
+  const data = await getData()
+  const parsedData = parseData(data)
+  return parsedData
+} catch (error) {
+  // log error message in console or report it into Sentry
+}
+```
+
+10. Prevent multiple form submissions and API calls on clicking submit buttons
+
+- Consider adding disabled state to buttons on performing async operations or form submissions. This will ensure that no redundant API calls are made
+
+```typescript
+// Bad:
+const saveInfo = async () => {
+  fetch(...)
+}
+// without disabling button it is possible to click it multiple times, which will trigger redundant API calls to Backend
+<button onClick={saveInfo}>Save</div>
+// Good:
+const saveInfo = async () => {
+  setIsSaving(true)
+  fetch(...)
+}
+
+<button disabled={isSaving} onClick={saveInfo}>Save</div>
+```
+
+11. Avoid using “sweepstake“ keyword in components props
+
+- This adjustment is necessary to ensure that HTML generated during server-side rendering (SSR) does not include the term "sweepstake" in JavaScript code. The presence of this keyword may lead to indexing by Google and cause issues with marketing ad accounts, potentially leading to account restrictions and blockage.
+
+```typescript
+// Bad:
+type Props = {
+  sweepstakeEnabled: bool,
+  minBetSweepstake: number,
+  goldSweepstakeText: string
+}
+function SomeComponent(props: Props) {
+  return <p> some text </p>
+}
+// Good:
+type Props = {
+  scEnabled: bool,
+  minBetSc: number,
+  goldLackycoinText: string
+}
+function SomeComponent(props: Props) {
+  return <p> some text </p>
+}
+```
+
+12. Do not use “next/image” for images stored in Google Cloud
+
+- If image is stored in Google Cloud it makes no sense consuming resources on Vercel. Replace next/image with standard HTML <img> tags or a custom image component that directly uses Google Cloud URLs
+
+```typescript
+// Bad
+import Image from 'next/image'
+
+function GmailImg() {
+  return <Image src={`${process.env.IMG_ORIGIN}/icons/gmail.svg`} alt='gmail icon' width={24} height={24} />
+}
+
+// Good
+function GmailImg() {
+  return <img src={`${process.env.IMG_ORIGIN}/icons/gmail.svg`} alt='gmail icon' width={24} height={24} />
+}
+```

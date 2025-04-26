@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+0. Component files structure
+
+```plaintext
+Button
+  Button.module.scss
+  Button.constants.ts
+  Button.types.ts
+  Button.tsx
+  hooks
+    useSmth.ts
+  utils
+    transformSmth.ts
+    getInitialProps.ts
+  components
+    SubButton
+      SubButton.tsx
+      SubButton.module.scss
+      SubButton.tsx
+  tests
+    mockedData
+      Button.ts
+    Button.test.tsx
+```

@@ -1,0 +1,111 @@
+---
+description: 
+globs: js,ts,tsx,jsx
+alwaysApply: false
+---
+
+# Javascript
+
+1. Variable's names
+
+- Variable's names should be nouns.
+- Names shouldn't include special symbols.
+- Boolean vars names should be as questions.
+
+```javascript
+// Bad:
+const price$10 = 10;
+const valid = false;
+// Good:
+const price10Dollars = 10;
+const isValid = false;
+```
+
+2. Function's names.
+
+- Function's names should be verbs.
+- Function name must clearly and accurately describe what the function does.
+
+```javascript
+// Bad:
+function age() {} // bad naming
+// Good:
+function verifyAge() {}
+// Bad:
+getAge(user) {
+  validateName(user.name) // "name" shouldn't be validated here
+  return user.age
+}
+// Good:
+getAge(user) {
+  return user.age
+}
+```
+
+3. Multiple nested ternary operators in one condition.
+
+- Nested ternary operators not allowed. While both versions achieve the same result, the "Good" code is generally preferred for its clarity and reduced nesting of ternaries. It separates the logic into smaller, more manageable steps, making the code more maintainable and less prone to errors.
+
+```javascript
+// Bad:
+return isUS ? (isStateAllowed ? thirdValue : fourthValue) : secondValue;
+// Good:
+const isUS = firstValue ? thirdValue : fourthValue;
+return isSomeConditionTruly ? isUS : secondValue;
+```
+
+4. Do not use empty returns.
+
+```javascript
+// Bad:
+function validateCondition() {
+  if(!value) {
+    return
+  }
+}
+// Good:
+function validateCondition() {
+  if(!value) {
+    return undefined
+  }
+}
+```
+
+5. Use constants instead of plain text/number
+
+```javascript
+// Bad:
+if (user.type === 4) {
+  // do smth here
+}
+// Good:
+const GUEST_TYPE = 4;
+if (user.type === GUEST_TYPE) { //do smth here }
+```
+
+6. Multiple async functions without Promise.all([…])
+
+- Parallel execution can improve performance, especially in scenarios where the asynchronous tasks are independent and don't depend on each other's completion.
+
+```javascript
+// Bad:
+const prismicProps = await getPrismicProps()
+const translations = await getTranslationsFromMemory()
+// Good:
+let [prismicProps, translations] = await Promise.all([
+  getPrismicProps(),
+  getTranslationsFromMemory(),
+])
+```
+
+7. Prefer Relative Imports based on TS config
+
+- Remove unnecessary path segments from imports when the path is configured in tsconfig.json.
+- It improves code readability and reduces redundancy.
+
+```javascript
+// Bad:
+import Custom404 from 'src/pageContainers/Custom404'; 
+// Good:
+import Custom404 from 'pageContainers/Custom404';
+```

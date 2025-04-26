@@ -1,0 +1,231 @@
+@import "@/app/styles/variables";
+@import "@/app/styles/mixins";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  z-index: 50;
+  background: rgba($background-color, 0.8);
+  backdrop-filter: blur(8px);
+  @include flex-center;
+  transition: box-shadow 0.3s ease;
+
+  &.scrolled {
+    box-shadow: 0 2px 8px rgba($text-color, 0.1);
+  }
+}
+
+.container {
+  @include container;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-xl;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 5.33px;
+  text-decoration: none;
+
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  span {
+    font-family: $font-family-base;
+    font-weight: $font-weight-bold;
+    font-size: 21.33px;
+    color: $text-color;
+    text-transform: uppercase;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: $spacing-lg;
+  align-items: center;
+
+  .link {
+    font-family: $font-family-base;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    color: $text-color;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $primary-color;
+      transition: width 0.2s ease;
+    }
+
+    &:hover,
+    &.active {
+      color: $primary-color;
+
+      &:after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xl;
+}
+
+.langSwitcher {
+  display: flex;
+  align-items: center;
+  gap: $spacing-base;
+}
+
+.langButton {
+  width: $spacing-xl;
+  height: $spacing-xl;
+  @include flex-center;
+  border: none;
+  border-radius: $border-radius-sm;
+  background: $background-secondary;
+  font-family: $font-family-base;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  color: $text-color;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    background: $primary-color;
+    color: $background-color;
+  }
+}
+
+.contacts {
+  display: flex;
+  align-items: center;
+  gap: $spacing-base;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  gap: $spacing-base;
+  padding: 10px $spacing-md;
+  border-radius: $border-radius-sm;
+  background: $text-color;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  span {
+    font-family: $font-family-base;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+    color: $background-color;
+    text-transform: uppercase;
+  }
+
+  svg {
+    color: $background-color;
+  }
+
+  &:hover {
+    background: $primary-color;
+  }
+}
+
+.menuButton {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: $text-color;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+@include desktop {
+  .container {
+    padding: $spacing-md;
+  }
+
+  .nav {
+    gap: $spacing-md;
+  }
+
+  .rightSection {
+    gap: $spacing-md;
+  }
+}
+
+@include tablet {
+  .nav .link {
+    font-size: $font-size-sm;
+  }
+
+  .contact span {
+    display: none;
+  }
+
+  .contact {
+    padding: $spacing-base;
+  }
+}
+
+@include mobile {
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 70%;
+    max-width: 300px;
+    background: $background-color;
+    @include flex-column;
+    padding: 5rem 2rem;
+    transition: all 0.3s ease;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    &.open {
+      right: 0;
+    }
+
+    .link {
+      font-size: $font-size-base;
+      padding: $spacing-base 0;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .menuButton {
+    display: block;
+    z-index: 1001;
+  }
+
+  .rightSection {
+    display: none;
+  }
+}
