@@ -1,6 +1,6 @@
 type ClassValue = string | number | boolean | undefined | null;
 type ClassArray = ClassValue[];
-type ClassObject = { [key: string]: any };
+type ClassObject = { [key: string]: ClassValue };
 type ClassInput = ClassValue | ClassArray | ClassObject;
 
 export function cn(...inputs: ClassInput[]): string {
